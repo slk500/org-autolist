@@ -134,7 +134,7 @@ automatically insert new list items.
             (org-at-item-p)
             (<= (point) (org-autolist-beginning-of-item-after-bullet)))
         (condition-case nil
-          (call-interactively 'org-outdent-item)
+          (org-outdent-item)
           (error (delete-region (line-beginning-position)
                     (line-end-position))))
 
