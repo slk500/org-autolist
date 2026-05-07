@@ -116,12 +116,12 @@ automatically insert new list items.
   ;; `org-return-follows-link` is enabled -- in this case, we should just let
   ;; org mode default to following the link.
   (let* ((el (org-element-at-point))
-          (parent (plist-get (cadr el) :parent))
+          (parent (org-element-property :parent el))
           ;; handle hard-wrapped list-items
           (is-listitem (or (org-at-item-p)
-                         (and (eq 'paragraph (car el))
-                           (eq 'item (car parent)))))
-          (is-checkbox (plist-get (cadr parent) :checkbox)))
+                         (and (eq 'paragraph (org-element-type el))
+                           (eq 'item (org-element-type parent)))))
+          (is-checkbox (org-element-property :checkbox parent)))
     (if (and is-listitem
           (not
             (and org-return-follows-link
@@ -135,7 +135,7 @@ automatically insert new list items.
             (<= (point) (org-autolist-beginning-of-item-after-bullet)))
         (condition-case nil
           (call-interactively 'org-outdent-item)
-          ('error (delete-region (line-beginning-position)
+          (error (delete-region (line-beginning-position)
                     (line-end-position))))
 
         ;; Now we can insert a new list item. The logic here is a little tricky
