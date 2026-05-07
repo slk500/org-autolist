@@ -1,4 +1,4 @@
-;;; org-autolist.el --- Improved list management in org-mode
+;;; org-autolist.el --- Improved list management in org-mode -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2022 Calvin Young
 
@@ -6,6 +6,7 @@
 ;; Keywords: lists, checklists, org-mode
 ;; Homepage: https://github.com/calvinwyoung/org-autolist
 ;; Version: 0.16
+;; Package-Requires: ((emacs "26.1"))
 
 ;; This file is not part of GNU Emacs.
 
@@ -99,7 +100,6 @@ This function uses the same logic as `org-beginning-of-line' when
 
 (defun org-autolist-at-empty-item-description-p ()
   "Is point at an *empty* description list item?"
-  (message "evaluating...")
   (org-list-at-regexp-after-bullet-p "\\(\\s-*\\)::\\(\\s-*$\\)"))
 
 (defadvice org-return (around org-autolist-return)
@@ -156,7 +156,7 @@ automatically insert new list items.
              (< (point) (line-end-position)))
             (newline))
 
-          ;; Otherwise just let org-mode figure it out it.
+          ;; Otherwise just let org-mode figure it out.
           (t
             (org-meta-return))))
       ad-do-it)))
@@ -193,12 +193,12 @@ list prefixes if `org-autolist-enable-delete' is t.
           ;; the previous line. There are, however a few exceptions.
           (cond
            ;; If we're on the first line in the buffer, then we should just
-           ;; delete the bullet point.n
+           ;; delete the bullet point.
            ((= 1 (line-number-at-pos))
             (delete-region (point) (line-beginning-position)))
 
            ;; If we're on a line with an empty description list, then
-           ;; we should delete the full line since there's not point leaving it
+           ;; we should delete the full line since there's no point leaving it
            ;; around.
            ((org-autolist-at-empty-item-description-p)
             (delete-region (line-end-position)
